@@ -609,7 +609,6 @@ namespace AI_Scoreplat
             textBox1.AppendText(string.Format("{0} {1}\r\n", DateTime.Now, "正在更新数据库.."));
             MySqlHelper.ExecuteSqlTran(sqllist);
             textBox1.AppendText(string.Format("{0} {1}\r\n", DateTime.Now, "定标分成功导入至听表!!!"));
-
         }
 
         #endregion
