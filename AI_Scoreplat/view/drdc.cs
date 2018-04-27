@@ -67,7 +67,7 @@ namespace AI_Scoreplat
                 foreach (var a in aList)
                 {
                     num++;
-                    string[] a1 = a.Split(',');
+                    string[] a1 = a.Split('\t');
                     try
                     {
                         if (num == 1)
@@ -213,7 +213,7 @@ namespace AI_Scoreplat
             List <score> scorelist = MySqlHelper.GetDataSet(CommandType.Text, sqlstr2).Tables[0].ToModels<score>();
             var scorelistd=scorelist.ToDictionary(d => string.Format(d.filename), d => d);
 
-            string sqlstr3 = string.Format("SELECT t2.* FROM AI_listenScore t1,AI_levelscore t2 WHERE t1.sign='0' AND t1.batchdesc='定标' AND t1.validflag='2' AND t1.papercode=t2.papercode AND t1.encodeno=t2.encodeno AND t1.pcid=t2.pcid");
+            string sqlstr3 = string.Format("SELECT t2.* FROM AI_listenScore t1,AI_levelscore t2 WHERE t1.sign='0' AND t1.batchdesc='定标' AND t1.papercode=t2.papercode AND t1.encodeno=t2.encodeno AND t1.pcid=t2.pcid");
             List<levelscore> levelscorelist = MySqlHelper.GetDataSet(CommandType.Text,sqlstr3).Tables[0].ToModels<levelscore>();
             textBox1.AppendText(string.Format("{0} 数量：{1}\r\n", DateTime.Now, "开始导出..."));
             if (File.Exists("定标分.txt"))
@@ -464,22 +464,25 @@ namespace AI_Scoreplat
                 textBox1.AppendText(string.Format("{0} {1}\r\n", DateTime.Now, "没有需要去重的!!!"));
                 return;
             }
-            foreach (var f in a11)
-            {
-                num++;
-                scorestr = scorestr + "," + f.scoreid;
-                if (num % 1000 == 0)
+            else {
+                foreach (var f in a11)
                 {
-                    string sql = string.Format("UPDATE AI_score SET validflag=1 WHERE scoreid in ({0})", scorestr);
-                    sqllist.Add(sql);
-                    scorestr = "0";
+                    num++;
+                    scorestr = scorestr + "," + f.scoreid;
+                    if (num % 1000 == 0)
+                    {
+                        string sql = string.Format("UPDATE AI_score SET validflag=1 WHERE scoreid in ({0})", scorestr);
+                        sqllist.Add(sql);
+                        scorestr = "0";
+                    }
                 }
+                string sql1 = string.Format("UPDATE AI_score SET validflag=1 WHERE scoreid in ({0})", scorestr);
+                sqllist.Add(sql1);
+                textBox1.AppendText(string.Format("{0} {1}\r\n", DateTime.Now, "正在更新数据库..."));
+                MySqlHelper.ExecuteSqlTran(sqllist, textBox1, "更新validflag值");
+                textBox1.AppendText(string.Format("{0} {1}\r\n", DateTime.Now, "写入数据库完成!!!"));
             }
-            string sql1 = string.Format("UPDATE AI_score SET validflag=1 WHERE scoreid in ({0})", scorestr);
-            sqllist.Add(sql1);
-            textBox1.AppendText(string.Format("{0} {1}\r\n", DateTime.Now, "正在更新数据库..."));
-            MySqlHelper.ExecuteSqlTran(sqllist, textBox1, "更新validflag值");
-            textBox1.AppendText(string.Format("{0} {1}\r\n", DateTime.Now, "写入数据库完成!!!"));
+            
         }
 
         private void btnexportpaper_Click(object sender, EventArgs e)
@@ -619,8 +622,8 @@ namespace AI_Scoreplat
             if (ofd1.ShowDialog() == DialogResult.OK)
             {
                 textBox1.AppendText(string.Format("{0} {1}\r\n", DateTime.Now, "定标分(过滤)导入中..."));
-                string scoreids=File.ReadAllText(ofd1.FileName);
-                scoreids = scoreids.Replace('\n', ',');
+                string scoreids=File.ReadAllText(ofd1.FileName).Replace("scoreid\r\n","");
+                scoreids = scoreids.Replace("\r\n", ",");
                 string sqlstr = string.Format("UPDATE AI_listenScore SET validflag='2' WHERE scoreid IN ({0})", scoreids);
                 MySqlHelper.ExecuteNonQuery(CommandType.Text,sqlstr);
                 textBox1.AppendText(string.Format("{0} {1}\r\n", DateTime.Now, "定标分(过滤)导入完成!!!"));
