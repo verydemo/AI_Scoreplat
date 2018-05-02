@@ -7,7 +7,6 @@ namespace AI_Scoreplat
 {
     public class outputr
     {
-        //papercode,itemno,pcid,encodeno,Itemcode
         //papercode, itemno, encodeno, filename, Score1, Statu, batchno, batchdesc,itemcode,pcid,scoreid
         public string papercode { get; set; }
 

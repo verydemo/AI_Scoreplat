@@ -93,7 +93,7 @@ namespace AI_Scoreplat
                     }
                 }
                 sqllist.Add(sqlstr);
-                string sqlupdate = "UPDATE AI_score t1,AI_itemdict t2 SET t1.scorelast=t2.fullscore WHERE t1.itemno=t2.itemno AND t1.scorelast>t2.fullscore;UPDATE AI_score SET scorelast=0 WHERE scorelast<0";
+                string sqlupdate = "UPDATE AI_score t1,AI_itemdict t2 SET t1.scorelast=t2.fullscore WHERE t1.itemno=t2.itemno AND t1.scorelast>t2.fullscore;UPDATE AI_score SET scorelast=0 WHERE scorelast<0;UPDATE AI_score SET planscore=round(scorelast*2)/2";
                 sqllist.Add(sqlupdate);
                 MySqlHelper.ExecuteSqlTran(sqllist,textBox1, "导入分数");
                 });

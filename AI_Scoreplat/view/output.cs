@@ -39,6 +39,29 @@ namespace AI_Scoreplat
             refreshcl4();
             refreshcl5();
             refreshcl6();
+            refreshcl7();
+
+
+            btnexport1.Click += btnexport1_Click;
+            btnexport2.Click += btnexport2_Click;
+            btnexport3.Click += btnexport3_Click;
+            btnexpoert4.Click += btnexpoert4_Click;
+            btnexport5.Click += btnexport5_Click;
+            btnexport6.Click += btnexport6_Click;
+            btnexport7.Click += btnexport7_Click;
+            
+
+
+        }
+
+        private void refreshcl7()
+        {
+            lab7.Text = "...";
+            Task.Factory.StartNew(() => {
+                int num1 = Convert.ToInt32(MySqlHelper.ExecuteScalar(CommandType.Text, "SELECT count(*) FROM AI_listenScore WHERE batchdesc='0分题' AND recheck='1'"));
+                int num2 = Convert.ToInt32(MySqlHelper.ExecuteScalar(CommandType.Text, "SELECT count(*) FROM AI_score WHERE planscore=0"));
+                lab7.Text = num1.ToString()+"/"+num2.ToString();
+            });
         }
 
         private void Nud6n1_ValueChanged(object sender, EventArgs e)
@@ -73,13 +96,14 @@ namespace AI_Scoreplat
         private List<outputr> cl5outputlist = new List<outputr>();
         private List<outputr> cl6outputlist = new List<outputr>();
         private List<outputr> cl7outputlist = new List<outputr>();
+        private List<outputr> cl8outputlist = new List<outputr>();
 
         private void refreshcl1()
         {
             nud1n1.ReadOnly = true;
             lab1.Text = "...";
             Task.Factory.StartNew(() => {
-                string sql = string.Format("SELECT count(*) FROM AI_score t1,AI_itemdict t2 WHERE t1.itemno=t2.itemno AND t2.itemtype='read' AND t1.scorelast<=t2.fullscore*{0} ORDER BY gop_raw DESC,wer ASC", nud1n1.Value / 100);
+                string sql = string.Format("SELECT count(*) FROM AI_score t1,AI_itemdict t2 WHERE t1.itemno=t2.itemno AND t2.itemtype='read' AND t1.planscore<=t2.fullscore*{0} ORDER BY gop_raw DESC,wer ASC", nud1n1.Value / 100);
                 int cl1count = Convert.ToInt32(MySqlHelper.ExecuteScalar(CommandType.Text, sql));
                 lab1.Text = cl1count.ToString();
                 nud1n1.ReadOnly = false;
@@ -91,7 +115,7 @@ namespace AI_Scoreplat
             nud1n1.ReadOnly = true;
             lab2.Text = "...";
            Task.Factory.StartNew(() => {
-                string sql = string.Format("SELECT count(*) FROM AI_score t1,AI_itemdict t2 WHERE t1.itemno=t2.itemno AND t2.itemtype='retell' AND t1.scorelast<t2.fullscore*{0} ORDER BY gop_lat DESC ", nud2n1.Value / 100);
+                string sql = string.Format("SELECT count(*) FROM AI_score t1,AI_itemdict t2 WHERE t1.itemno=t2.itemno AND t2.itemtype='retell' AND t1.planscore<t2.fullscore*{0} ORDER BY gop_lat DESC ", nud2n1.Value / 100);
                 int cl2count = Convert.ToInt32(MySqlHelper.ExecuteScalar(CommandType.Text, sql));
                 lab2.Text = cl2count.ToString();
                nud1n1.ReadOnly = false;
@@ -103,7 +127,7 @@ namespace AI_Scoreplat
             nud3n2.ReadOnly = true;
             lab3.Text = "...";
             Task.Factory.StartNew(() => {
-                string sql = string.Format("SELECT count(*) FROM AI_score t1,AI_itemdict t2,(SELECT encodeno,papercode,pcid,sum(scorelast) scoresqa,(SELECT sum(fullscore) FROM AI_itemdict WHERE itemtype='QA') fullqascore FROM AI_score t31,AI_itemdict t32 WHERE t31.itemno=t32.itemno AND t32.itemtype='QA' GROUP BY encodeno,papercode,pcid) t3 WHERE t1.papercode=t3.papercode AND t1.encodeno=t3.encodeno AND t1.pcid=t3.pcid AND t1.itemno=t2.itemno AND t2.itemtype='read' AND t1.scorelast>t2.fullscore*{0} AND t3.scoresqa<t3.fullqascore*{1}", nud3n1.Value / 100, nud3n2.Value / 100);
+                string sql = string.Format("SELECT count(*) FROM AI_score t1,AI_itemdict t2,(SELECT encodeno,papercode,pcid,sum(planscore) scoresqa,(SELECT sum(fullscore) FROM AI_itemdict WHERE itemtype='QA') fullqascore FROM AI_score t31,AI_itemdict t32 WHERE t31.itemno=t32.itemno AND t32.itemtype='QA' GROUP BY encodeno,papercode,pcid) t3 WHERE t1.papercode=t3.papercode AND t1.encodeno=t3.encodeno AND t1.pcid=t3.pcid AND t1.itemno=t2.itemno AND t2.itemtype='read' AND t1.planscore>t2.fullscore*{0} AND t3.scoresqa<t3.fullqascore*{1}", nud3n1.Value / 100, nud3n2.Value / 100);
                 int cl3count = Convert.ToInt32(MySqlHelper.ExecuteScalar(CommandType.Text, sql));
                 lab3.Text = cl3count.ToString();
                 nud3n1.ReadOnly = false;
@@ -117,7 +141,7 @@ namespace AI_Scoreplat
             nud4n2.ReadOnly = true;
             lab4.Text = "...";
             Task.Factory.StartNew(() => {
-                string sql = string.Format("SELECT count(*) FROM  (SELECT encodeno,papercode,pcid,sum(scorelast) score_zg FROM AI_score GROUP BY encodeno,papercode,pcid) t1, AI_kgf t2,AI_score t3 WHERE t1.encodeno=t2.encodeno AND t1.papercode=t2.papercode AND t1.pcid=t2.pcid  AND t1.encodeno=t3.encodeno AND t1.papercode=t3.papercode AND t1.pcid=t2.pcid AND t2.score<={0} AND t1.score_zg>{1}", nud4n1.Value , nud4n2.Value );
+                string sql = string.Format("SELECT count(*) FROM  (SELECT encodeno,papercode,pcid,sum(planscore) score_zg FROM AI_score GROUP BY encodeno,papercode,pcid) t1, AI_kgf t2,AI_score t3 WHERE t1.encodeno=t2.encodeno AND t1.papercode=t2.papercode AND t1.pcid=t2.pcid  AND t1.encodeno=t3.encodeno AND t1.papercode=t3.papercode AND t1.pcid=t2.pcid AND t2.score<={0} AND t1.score_zg>{1}", nud4n1.Value , nud4n2.Value );
                 int cl4count = Convert.ToInt32(MySqlHelper.ExecuteScalar(CommandType.Text, sql));
                 lab4.Text = cl4count.ToString();
                 nud4n1.ReadOnly = false;
@@ -131,7 +155,7 @@ namespace AI_Scoreplat
             nud5n2.ReadOnly = true;
             lab5.Text = "...";
             Task.Factory.StartNew(() => {
-                string sql = string.Format("SELECT count(*) FROM  (SELECT encodeno,papercode,pcid,sum(scorelast) score_zg FROM AI_score GROUP BY encodeno,papercode,pcid) t1, AI_kgf t2,AI_score t3 WHERE t1.encodeno=t2.encodeno AND t1.papercode=t2.papercode AND t1.pcid=t2.pcid  AND t1.encodeno=t3.encodeno AND t1.papercode=t3.papercode AND t1.pcid=t2.pcid AND t2.score>{1} AND t1.score_zg<={0}", nud5n1.Value, nud5n2.Value);
+                string sql = string.Format("SELECT count(*) FROM  (SELECT encodeno,papercode,pcid,sum(planscore) score_zg FROM AI_score GROUP BY encodeno,papercode,pcid) t1, AI_kgf t2,AI_score t3 WHERE t1.encodeno=t2.encodeno AND t1.papercode=t2.papercode AND t1.pcid=t2.pcid  AND t1.encodeno=t3.encodeno AND t1.papercode=t3.papercode AND t1.pcid=t2.pcid AND t2.score>{1} AND t1.score_zg<={0}", nud5n1.Value, nud5n2.Value);
                 int cl5count = Convert.ToInt32(MySqlHelper.ExecuteScalar(CommandType.Text, sql));
                 lab5.Text = cl5count.ToString();
                 nud5n1.ReadOnly = false;
@@ -145,7 +169,7 @@ namespace AI_Scoreplat
             nud6n2.ReadOnly = true;
             lab6.Text = "...";
             Task.Factory.StartNew(() => {
-                string sql = string.Format("SELECT count(*) FROM  AI_kgf t1, AI_itemdict t2, AI_score t3, AI_score t4 WHERE t1.papercode=t3.papercode AND t1.encodeno=t3.encodeno AND t1.pcid=t3.pcid AND t3.itemno=t2.itemno AND t2.itemtype='retell' AND t1.score<=15*{0} AND t3.scorelast>=t2.fullscore*{1} AND t3.papercode=t4.papercode AND t3.encodeno=t4.encodeno AND t3.pcid=t4.pcid", nud6n1.Value / 100, nud6n2.Value / 100);
+                string sql = string.Format("SELECT count(*) FROM  AI_kgf t1, AI_itemdict t2, AI_score t3, AI_score t4 WHERE t1.papercode=t3.papercode AND t1.encodeno=t3.encodeno AND t1.pcid=t3.pcid AND t3.itemno=t2.itemno AND t2.itemtype='retell' AND t1.score<=15*{0} AND t3.planscore>=t2.fullscore*{1} AND t3.papercode=t4.papercode AND t3.encodeno=t4.encodeno AND t3.pcid=t4.pcid", nud6n1.Value / 100, nud6n2.Value / 100);
                 int cl6count = Convert.ToInt32(MySqlHelper.ExecuteScalar(CommandType.Text, sql));
                 lab6.Text = cl6count.ToString();
                 nud6n1.ReadOnly = false;
@@ -160,7 +184,7 @@ namespace AI_Scoreplat
 
         private void btnexport1_Click(object sender, EventArgs e)
         {
-            string sql = string.Format("SELECT t1.papercode,t1.itemno,t1.pcid,t1.encodeno,replace(t1.itemcode,'ans.mp3','') Itemcode1,t1.filename,t1.scorelast Score1 FROM AI_score t1,AI_itemdict t2 WHERE t1.itemno=t2.itemno AND t2.itemtype='read' AND t1.scorelast<=t2.fullscore*{0} ORDER BY gop_raw DESC,wer ASC", nud1n1.Value / 100);
+            string sql = string.Format("SELECT t1.papercode,t1.itemno,t1.pcid,t1.encodeno,replace(t1.itemcode,'ans.mp3','') Itemcode1,t1.filename,t1.planscore Score1 FROM AI_score t1,AI_itemdict t2 WHERE t1.itemno=t2.itemno AND t2.itemtype='read' AND t1.planscore<=t2.fullscore*{0} ORDER BY gop_raw DESC,wer ASC", nud1n1.Value / 100);
             cl1outputlist = MySqlHelper.GetDataSetnew(sql).Tables[0].ToModels<outputr>();
             exportret(cl1outputlist.Take(Convert.ToInt32( nud1n2.Value)).ToList(), "朗读题复核.txt");
             
@@ -168,7 +192,7 @@ namespace AI_Scoreplat
 
         private void btnexport2_Click(object sender, EventArgs e)
         {
-            string sql = string.Format("SELECT t1.papercode,t1.itemno,t1.pcid,t1.encodeno,replace(t1.itemcode,'ans.mp3','') Itemcode1,t1.filename,t1.scorelast Score1 FROM AI_score t1,AI_itemdict t2 WHERE t1.itemno=t2.itemno AND t2.itemtype='retell' AND t1.scorelast<t2.fullscore*{0} ORDER BY gop_lat DESC", nud1n1.Value / 100);
+            string sql = string.Format("SELECT t1.papercode,t1.itemno,t1.pcid,t1.encodeno,replace(t1.itemcode,'ans.mp3','') Itemcode1,t1.filename,t1.planscore Score1 FROM AI_score t1,AI_itemdict t2 WHERE t1.itemno=t2.itemno AND t2.itemtype='retell' AND t1.planscore<t2.fullscore*{0} ORDER BY gop_lat DESC", nud1n1.Value / 100);
             cl2outputlist = MySqlHelper.GetDataSetnew(sql).Tables[0].ToModels<outputr>();
             exportret(cl2outputlist.Take(Convert.ToInt32(nud2n2.Value)).ToList(), "简述题复核.txt");
 
@@ -176,7 +200,7 @@ namespace AI_Scoreplat
 
         private void btnexport3_Click(object sender, EventArgs e)
         {
-            string sql = string.Format("SELECT t1.papercode,t1.itemno,t1.pcid,t1.encodeno,replace(t1.itemcode,'ans.mp3','') Itemcode1,t1.filename,t1.scorelast Score1 FROM AI_score t1,AI_itemdict t2,(SELECT encodeno,papercode,pcid,sum(t31.scorelast) scoresqa,(SELECT sum(fullscore) FROM AI_itemdict WHERE itemtype='QA') fullqascore FROM AI_score t31,AI_itemdict t32 WHERE t31.itemno=t32.itemno AND t32.itemtype='QA' GROUP BY encodeno,papercode,pcid) t3 WHERE t1.papercode=t3.papercode AND t1.encodeno=t3.encodeno AND t1.pcid=t3.pcid AND t1.itemno=t2.itemno AND t2.itemtype='read' AND t1.scorelast>t2.fullscore*{0} AND t3.scoresqa<t3.fullqascore*{1}", nud3n1.Value / 100, nud3n2.Value / 100);
+            string sql = string.Format("SELECT t1.papercode,t1.itemno,t1.pcid,t1.encodeno,replace(t1.itemcode,'ans.mp3','') Itemcode1,t1.filename,t1.planscore Score1 FROM AI_score t1,AI_itemdict t2,(SELECT encodeno,papercode,pcid,sum(t31.planscore) scoresqa,(SELECT sum(fullscore) FROM AI_itemdict WHERE itemtype='QA') fullqascore FROM AI_score t31,AI_itemdict t32 WHERE t31.itemno=t32.itemno AND t32.itemtype='QA' GROUP BY encodeno,papercode,pcid) t3 WHERE t1.papercode=t3.papercode AND t1.encodeno=t3.encodeno AND t1.pcid=t3.pcid AND t1.itemno=t2.itemno AND t2.itemtype='read' AND t1.planscore>t2.fullscore*{0} AND t3.scoresqa<t3.fullqascore*{1}", nud3n1.Value / 100, nud3n2.Value / 100);
             cl3outputlist = MySqlHelper.GetDataSetnew(sql).Tables[0].ToModels<outputr>();
             exportret(cl3outputlist.Take(Convert.ToInt32(nud3n3.Value)).ToList(), "问答题相关性复核.txt");
 
@@ -184,6 +208,7 @@ namespace AI_Scoreplat
 
         private void exportret(List<outputr> outlist,string txtname,string flag="0")
         {
+            if (outlist.Count == 0) { MessageBox.Show("数据量为0,无需操作！！！"); return; }
             if (flag == "1")
             {
                 int batchno = Convert.ToInt32(MySqlHelper.ExecuteScalar(CommandType.Text, "SELECT max(batchno) FROM AI_listenScore")) + 1;
@@ -227,30 +252,46 @@ namespace AI_Scoreplat
 
         private void btnexpoert4_Click(object sender, EventArgs e)
         {
-            string sql = string.Format("SELECT t2.papercode,t2.encodeno,t2.pcid,t3.itemno,replace(t3.itemcode,'ans.mp3','') Itemcode1,t3.filename,t3.scorelast Score1,t3.itemcode,t3.scoreid FROM  (SELECT encodeno,papercode,pcid,sum(scorelast) score_zg FROM AI_score GROUP BY encodeno,papercode,pcid) t1, AI_kgf t2,AI_score t3 WHERE t1.encodeno=t2.encodeno AND t1.papercode=t2.papercode AND t1.pcid=t2.pcid  AND t1.encodeno=t3.encodeno AND t1.papercode=t3.papercode AND t1.pcid=t2.pcid AND t2.score<={0} AND t1.score_zg>={1}", nud4n1.Value, nud4n2.Value);
+            string sql = string.Format("SELECT t2.papercode,t2.encodeno,t2.pcid,t3.itemno,replace(t3.itemcode,'ans.mp3','') Itemcode1,t3.filename,t3.planscore Score1,t3.itemcode,t3.scoreid FROM  (SELECT encodeno,papercode,pcid,sum(planscore) score_zg FROM AI_score GROUP BY encodeno,papercode,pcid) t1, AI_kgf t2,AI_score t3 WHERE t1.encodeno=t2.encodeno AND t1.papercode=t2.papercode AND t1.pcid=t2.pcid  AND t1.encodeno=t3.encodeno AND t1.papercode=t3.papercode AND t1.pcid=t2.pcid AND t2.score<={0} AND t1.score_zg>={1}", nud4n1.Value, nud4n2.Value);
             cl4outputlist = MySqlHelper.GetDataSetnew( sql).Tables[0].ToModels<outputr>();
             exportret(cl4outputlist, "客观0主观有.txt", "1");
         }
 
         private void btnexport5_Click(object sender, EventArgs e)
         {
-            string sql = string.Format("SELECT t2.papercode,t2.encodeno,t2.pcid,t3.itemno,replace(t3.itemcode,'ans.mp3','') Itemcode1,t3.filename,t3.scorelast Score1,t3.itemcode,t3.scoreid FROM  (SELECT encodeno,papercode,pcid,sum(scorelast) score_zg FROM AI_score GROUP BY encodeno,papercode,pcid) t1, AI_kgf t2,AI_score t3 WHERE t1.encodeno=t2.encodeno AND t1.papercode=t2.papercode AND t1.pcid=t2.pcid  AND t1.encodeno=t3.encodeno AND t1.papercode=t3.papercode AND t1.pcid=t2.pcid AND t2.score>={1} AND t1.score_zg<={0}", nud5n1.Value, nud5n2.Value);
+            string sql = string.Format("SELECT t2.papercode,t2.encodeno,t2.pcid,t3.itemno,replace(t3.itemcode,'ans.mp3','') Itemcode1,t3.filename,t3.planscore Score1,t3.itemcode,t3.scoreid FROM  (SELECT encodeno,papercode,pcid,sum(planscore) score_zg FROM AI_score GROUP BY encodeno,papercode,pcid) t1, AI_kgf t2,AI_score t3 WHERE t1.encodeno=t2.encodeno AND t1.papercode=t2.papercode AND t1.pcid=t2.pcid  AND t1.encodeno=t3.encodeno AND t1.papercode=t3.papercode AND t1.pcid=t2.pcid AND t2.score>={1} AND t1.score_zg<={0}", nud5n1.Value, nud5n2.Value);
             cl5outputlist = MySqlHelper.GetDataSetnew(sql).Tables[0].ToModels<outputr>();
             exportret(cl5outputlist, "主观0客观有.txt", "1");
         }
 
         private void btnexport6_Click(object sender, EventArgs e)
         {
-            string sql = string.Format("SELECT t4.papercode,t4.itemno,t4.pcid,t4.encodeno,replace(t4.itemcode,'ans.mp3','') Itemcode1 , t4.filename,t4.scorelast Score1,t4.itemcode,t4.scoreid FROM  AI_kgf t1, AI_itemdict t2, AI_score t3, AI_score t4 WHERE t1.papercode=t3.papercode AND t1.encodeno=t3.encodeno AND t1.pcid=t3.pcid AND t3.itemno=t2.itemno AND t2.itemtype='retell' AND t1.score<=15*{0} AND t3.scorelast>=t2.fullscore*{1} AND t3.papercode=t4.papercode AND t3.encodeno=t4.encodeno AND t3.pcid=t4.pcid", nud6n1.Value/100, nud6n2.Value/100);
+            string sql = string.Format("SELECT t4.papercode,t4.itemno,t4.pcid,t4.encodeno,replace(t4.itemcode,'ans.mp3','') Itemcode1 , t4.filename,t4.planscore Score1,t4.itemcode,t4.scoreid FROM  AI_kgf t1, AI_itemdict t2, AI_score t3, AI_score t4 WHERE t1.papercode=t3.papercode AND t1.encodeno=t3.encodeno AND t1.pcid=t3.pcid AND t3.itemno=t2.itemno AND t2.itemtype='retell' AND t1.score<=15*{0} AND t3.planscore>=t2.fullscore*{1} AND t3.papercode=t4.papercode AND t3.encodeno=t4.encodeno AND t3.pcid=t4.pcid", nud6n1.Value/100, nud6n2.Value/100);
             cl6outputlist = MySqlHelper.GetDataSetnew(sql).Tables[0].ToModels<outputr>();
             exportret(cl6outputlist, "客观低简述高.txt", "1");
         }
 
         private void btnexport7_Click(object sender, EventArgs e)
         {
-            string sql = string.Format("SELECT t2.papercode,t2.itemno,t2.pcid,t2.encodeno,replace(t2.itemcode,'ans.mp3','') Itemcode1,t2.filename,t2.scorelast Score1 FROM AI_listenScore t1,AI_score t2 WHERE batchdesc='主观0客观有' AND recheck='1' AND t1.filename=t2.filename");
+            string sql = string.Format("SELECT t2.papercode,t2.itemno,t2.pcid,t2.encodeno,replace(t2.itemcode,'ans.mp3','') Itemcode1,t2.filename,t2.planscore Score1 FROM AI_listenScore t1,AI_score t2 WHERE batchdesc='主观0客观有' AND recheck='1' AND t1.filename=t2.filename");
             cl7outputlist = MySqlHelper.GetDataSetnew(sql).Tables[0].ToModels<outputr>();
             exportret(cl7outputlist, "主观0客观有.txt");
         }
+
+        private void btnimport8_Click(object sender, EventArgs e)
+        {
+            string sql = string.Format("SELECT papercode,itemno, encodeno, filename,planscore Score1,itemcode,pcid,scoreid FROM AI_score WHERE planscore=0");
+            cl8outputlist = MySqlHelper.GetDataSetnew(sql).Tables[0].ToModels<outputr>();
+            exportret(cl8outputlist, "0分题.txt", "1");
+        }
+
+        private void btnexport8_Click(object sender, EventArgs e)
+        {
+            string sql = string.Format("SELECT papercode, itemno, encodeno, filename, Score1, Statu, batchno, batchdesc,replace(itemcode,'ans.mp3','') Itemcode1,pcid,scoreid FROM AI_listenScore WHERE batchdesc='0分题' AND recheck='1'");
+            cl8outputlist = MySqlHelper.GetDataSetnew(sql).Tables[0].ToModels<outputr>();
+            exportret(cl8outputlist, "0分题.txt", "0");
+        }
+
+
     }
 }

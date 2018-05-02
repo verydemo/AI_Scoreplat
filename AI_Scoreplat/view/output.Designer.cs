@@ -28,7 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.lab7 = new System.Windows.Forms.Label();
+            this.btnexport8 = new System.Windows.Forms.Button();
+            this.btnimport8 = new System.Windows.Forms.Button();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.btnexport7 = new System.Windows.Forms.Button();
             this.label32 = new System.Windows.Forms.Label();
@@ -94,7 +101,9 @@
             this.label16 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel1.SuspendLayout();
+            this.groupBox8.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nud6n2)).BeginInit();
@@ -120,6 +129,7 @@
             // panel1
             // 
             this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.groupBox8);
             this.panel1.Controls.Add(this.groupBox7);
             this.panel1.Controls.Add(this.groupBox6);
             this.panel1.Controls.Add(this.groupBox5);
@@ -130,8 +140,78 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1153, 928);
+            this.panel1.Size = new System.Drawing.Size(1153, 1033);
             this.panel1.TabIndex = 0;
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox8.Controls.Add(this.lab7);
+            this.groupBox8.Controls.Add(this.btnexport8);
+            this.groupBox8.Controls.Add(this.btnimport8);
+            this.groupBox8.Controls.Add(this.label33);
+            this.groupBox8.Controls.Add(this.label34);
+            this.groupBox8.Font = new System.Drawing.Font("幼圆", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.groupBox8.Location = new System.Drawing.Point(7, 929);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(1138, 92);
+            this.groupBox8.TabIndex = 8;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "策略七 0分题";
+            // 
+            // lab7
+            // 
+            this.lab7.AutoSize = true;
+            this.lab7.Location = new System.Drawing.Point(535, 40);
+            this.lab7.Name = "lab7";
+            this.lab7.Size = new System.Drawing.Size(0, 20);
+            this.lab7.TabIndex = 4;
+            // 
+            // btnexport8
+            // 
+            this.btnexport8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnexport8.Location = new System.Drawing.Point(1031, 40);
+            this.btnexport8.Name = "btnexport8";
+            this.btnexport8.Size = new System.Drawing.Size(81, 33);
+            this.btnexport8.TabIndex = 1;
+            this.btnexport8.Text = "导出";
+            this.toolTip1.SetToolTip(this.btnexport8, "将数据导出(交付)");
+            this.btnexport8.UseVisualStyleBackColor = true;
+            this.btnexport8.Click += new System.EventHandler(this.btnexport8_Click);
+            // 
+            // btnimport8
+            // 
+            this.btnimport8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnimport8.Location = new System.Drawing.Point(898, 40);
+            this.btnimport8.Name = "btnimport8";
+            this.btnimport8.Size = new System.Drawing.Size(81, 33);
+            this.btnimport8.TabIndex = 1;
+            this.btnimport8.Text = "插入";
+            this.toolTip1.SetToolTip(this.btnimport8, "将数据插入音频审核系统");
+            this.btnimport8.UseVisualStyleBackColor = true;
+            this.btnimport8.Click += new System.EventHandler(this.btnimport8_Click);
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Font = new System.Drawing.Font("幼圆", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label33.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.label33.Location = new System.Drawing.Point(20, 40);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(219, 20);
+            this.label33.TabIndex = 0;
+            this.label33.Text = "说明：0分的题(可操作)";
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Font = new System.Drawing.Font("幼圆", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label34.Location = new System.Drawing.Point(304, 40);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(209, 20);
+            this.label34.TabIndex = 3;
+            this.label34.Text = "需复核数/0分题总数：";
             // 
             // groupBox7
             // 
@@ -155,6 +235,7 @@
             this.btnexport7.Size = new System.Drawing.Size(81, 33);
             this.btnexport7.TabIndex = 1;
             this.btnexport7.Text = "导出";
+            this.toolTip1.SetToolTip(this.btnexport7, "将主客相关数据导出");
             this.btnexport7.UseVisualStyleBackColor = true;
             // 
             // label32
@@ -219,6 +300,7 @@
             this.btnexport6.Size = new System.Drawing.Size(81, 36);
             this.btnexport6.TabIndex = 4;
             this.btnexport6.Text = "插入";
+            this.toolTip1.SetToolTip(this.btnexport6, "将数据插入音频审核系统");
             this.btnexport6.UseVisualStyleBackColor = true;
             // 
             // lab6
@@ -326,6 +408,7 @@
             this.btnexport5.Size = new System.Drawing.Size(81, 36);
             this.btnexport5.TabIndex = 4;
             this.btnexport5.Text = "插入";
+            this.toolTip1.SetToolTip(this.btnexport5, "将数据插入音频审核系统");
             this.btnexport5.UseVisualStyleBackColor = true;
             // 
             // lab5
@@ -425,6 +508,7 @@
             this.btnexpoert4.Size = new System.Drawing.Size(81, 36);
             this.btnexpoert4.TabIndex = 4;
             this.btnexpoert4.Text = "插入";
+            this.toolTip1.SetToolTip(this.btnexpoert4, "将数据插入音频审核系统");
             this.btnexpoert4.UseVisualStyleBackColor = true;
             // 
             // lab4
@@ -545,6 +629,7 @@
             this.btnexport3.Size = new System.Drawing.Size(81, 36);
             this.btnexport3.TabIndex = 4;
             this.btnexport3.Text = "导出";
+            this.toolTip1.SetToolTip(this.btnexport3, "将数据导出(交付)");
             this.btnexport3.UseVisualStyleBackColor = true;
             // 
             // lab3
@@ -710,6 +795,7 @@
             this.btnexport2.Size = new System.Drawing.Size(81, 36);
             this.btnexport2.TabIndex = 4;
             this.btnexport2.Text = "导出";
+            this.toolTip1.SetToolTip(this.btnexport2, "将数据导出(交付)");
             this.btnexport2.UseVisualStyleBackColor = true;
             // 
             // lab2
@@ -837,6 +923,7 @@
             this.btnexport1.Size = new System.Drawing.Size(81, 36);
             this.btnexport1.TabIndex = 4;
             this.btnexport1.Text = "导出";
+            this.toolTip1.SetToolTip(this.btnexport1, "将数据导出(交付)");
             this.btnexport1.UseVisualStyleBackColor = true;
             // 
             // lab1
@@ -921,13 +1008,15 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1153, 928);
+            this.ClientSize = new System.Drawing.Size(1153, 1033);
             this.Controls.Add(this.panel1);
             this.Name = "output";
             this.Text = "分数核查";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.output_Load);
             this.panel1.ResumeLayout(false);
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
             this.groupBox6.ResumeLayout(false);
@@ -1027,5 +1116,12 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Button btnimport8;
+        private System.Windows.Forms.Button btnexport8;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.Label lab7;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
