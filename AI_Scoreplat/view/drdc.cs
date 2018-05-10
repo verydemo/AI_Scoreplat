@@ -426,10 +426,10 @@ namespace AI_Scoreplat
                 List<string> sqlstrlist = new List<string>();
                 doclist.ForEach(a =>
                 {
-                    if (a.tmptxt.ToUpper().Contains(s1.ToUpper()) || a.modeltxt.ToUpper().Contains(s1.Trim().ToUpper()))
+                    if (a.tmptxt.ToUpper().Contains(s1.ToUpper()) || a.modeltxt.ToUpper().Contains(s1.ToUpper()))
                     {
-                        a.tmptxt = Regex.Replace(a.tmptxt, s1.Trim(), s2.Trim(), RegexOptions.IgnoreCase);
-                        a.modeltxt = Regex.Replace(a.modeltxt, s1.Trim(), s2.Trim(), RegexOptions.IgnoreCase);
+                        a.tmptxt = Regex.Replace(a.tmptxt, s1, s2, RegexOptions.IgnoreCase);
+                        a.modeltxt = Regex.Replace(a.modeltxt, s1, s2, RegexOptions.IgnoreCase);
                         a.modeltxt = regextxt(a.modeltxt);
                         string sql = string.Format("UPDATE AI_doc SET modeltxt='{0}',tmptxt='{1}' WHERE docid={2}", a.modeltxt.Replace("'", @"\'"), a.tmptxt.Replace("'", @"\'"), a.docid);
                         sqlstrlist.Add(sql);
